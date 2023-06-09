@@ -3,6 +3,7 @@ package com.ecommerce.service;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -180,6 +181,15 @@ public class ProductService {
 	    public List<Product> listViewProducts() {
 	        return productRepository.listViewProducts();
 	    }
-
+	    
+	    public Product getProductById(Long id) {
+	    	
+	    	return productRepository.getById(id);
+	    }
+	    
+	    public List<Product> getRelatedProducts(Long categoryId){
+	    	
+	    	return productRepository.getRelatedProducts(categoryId);
+	    }
 
 }

@@ -1,25 +1,15 @@
 package com.ecommerce.controller;
 
-import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ecommerce.dto.CategoryDto;
-import com.ecommerce.dto.ProductDto;
-import com.ecommerce.model.Category;
 import com.ecommerce.model.Product;
 import com.ecommerce.service.CategoryService;
 import com.ecommerce.service.ProductService;
@@ -43,4 +33,22 @@ public class ProductController {
         model.addAttribute("products", products);
         return "shop";
     }
+    
+    @GetMapping("/find-product/{id}")
+    public String findProductById(@PathVariable("id") Long id, Model model) {
+    	
+    	Product product = productService.getProductById(id);
+    	Long categoryId = product.getCategory().getId();
+    	List<Product> products = productService.getRelatedProducts(categoryId);
+    	for(Product p: products) {
+    		
+    		System.out.println(p.getCategory().getId());
+    		
+    	}
+    	model.addAttribute("product", product);
+    	model.addAttribute("products", products);
+    	return "product-detail";
+    	
+    }
+    
 }
