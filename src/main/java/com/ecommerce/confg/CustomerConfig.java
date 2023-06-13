@@ -42,19 +42,30 @@ public class CustomerConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/*").permitAll()
-                .antMatchers("/customer/*").hasAuthority("CUSTOMER")
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/do-login")
-                .defaultSuccessUrl("/index")
-                .and()
-                .logout()
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout")
-                .permitAll();
+            // Allow access to all URLs
+            .antMatchers("/*").permitAll()
+            // Allow access to URLs starting with "/customer/*" only for users with "CUSTOMER" authority
+            .antMatchers("/customer/*").hasAuthority("CUSTOMER")
+            .and()
+            .formLogin()
+            // Specify the custom login page URL
+            .loginPage("/login")
+            // Specify the URL where the login form should be submitted
+            .loginProcessingUrl("/do-login")
+            // Specify the URL to redirect to after successful login
+            .defaultSuccessUrl("/index")
+            .and()
+            .logout()
+            // Invalidate the HTTP session on logout
+            .invalidateHttpSession(true)
+            // Clear the authentication on logout
+            .clearAuthentication(true)
+            // Specify the URL to match for logout request
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+            // Specify the URL to redirect to after successful logout
+            .logoutSuccessUrl("/login?logout")
+            // Allow access to the logout URL
+            .permitAll();
     }
+
 }
