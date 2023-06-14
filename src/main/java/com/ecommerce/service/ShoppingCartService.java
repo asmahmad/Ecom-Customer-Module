@@ -13,12 +13,12 @@ import com.ecommerce.model.ShoppingCart;
 import com.ecommerce.repository.CartItemRepository;
 import com.ecommerce.repository.ShoppingCartRepository;
 
+import lombok.AllArgsConstructor;
+@AllArgsConstructor
 @Service
 public class ShoppingCartService {
-    @Autowired
+    
     private CartItemRepository itemRepository;
-
-    @Autowired
     private ShoppingCartRepository cartRepository;
 
     
