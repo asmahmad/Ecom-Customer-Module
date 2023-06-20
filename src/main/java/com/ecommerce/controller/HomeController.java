@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.ecommerce.dto.ProductDto;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.Customer;
+import com.ecommerce.model.ShoppingCart;
 import com.ecommerce.service.CategoryService;
+import com.ecommerce.service.CustomerService;
 import com.ecommerce.service.ProductService;
 
 import lombok.AllArgsConstructor;
@@ -24,9 +26,7 @@ import lombok.AllArgsConstructor;
 public class HomeController {
 	
 	private ProductService productService;
-	private CategoryService customerService;
-
-	@Autowired
+	private CustomerService customerService;
 	private CategoryService categoryService;
 
 	@RequestMapping(value = { "/index", "/" }, method = RequestMethod.GET)
@@ -34,9 +34,9 @@ public class HomeController {
 
 		if (principal != null) {
 			session.setAttribute("username", principal.getName());
-			//Customer customer = customerService.findByUsername(principal.getName());
-			//ShoppingCart cart = customer.getShoppingCart();
-			//session.setAttribute("totalItems", cart.getTotalItems());
+			Customer customer = customerService.findByUsername(principal.getName());
+			ShoppingCart cart = customer.getShoppingCart();
+			session.setAttribute("totalItems", cart.getTotalItems());
 		} else {
 			session.removeAttribute("username");
 		}

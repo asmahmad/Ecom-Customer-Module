@@ -81,12 +81,55 @@ public class ShoppingCartService {
         return cartRepository.save(cart);
     }
 
-   
+    public ShoppingCart updateItemInCart(Product product, int quantity, Customer customer) {
+        ShoppingCart cart = customer.getShoppingCart();
+
+        Set<CartItem> cartItems = cart.getCartItem();
+
+        CartItem item = findCartItem(cartItems, product.getId());
+
+        item.setQuantity(quantity);
+        item.setTotalPrice(quantity * product.getCostPrice());
+
+        itemRepository.save(item);
+
+        int totalItems = totalItems(cartItems);
+        double totalPrice = totalPrice(cartItems);
+
+        cart.setTotalItems(totalItems);
+        cart.setTotalPrices(totalPrice);
+
+        return cartRepository.save(cart);
+    }
+    
+    public ShoppingCart deleteItemFromCart(Product product, Customer customer) {
+        ShoppingCart cart = customer.getShoppingCart();
+
+        Set<CartItem> cartItems = cart.getCartItem();
+
+        CartItem item = findCartItem(cartItems, product.getId());
+
+        cartItems.remove(item);
+
+        itemRepository.delete(item);
+
+        double totalPrice = totalPrice(cartItems);
+        int totalItems = totalItems(cartItems);
+
+        cart.setCartItem(cartItems);
+        cart.setTotalItems(totalItems);
+        cart.setTotalPrices(totalPrice);
+
+        return cartRepository.save(cart);
+    }
+ 
 
     private CartItem findCartItem(Set<CartItem> cartItems, Long productId) {
         if (cartItems == null) {
             return null;
         }
+        
+        CartItem cartItem =  null;
 
         // Iterate over the cart items and find the one with the matching product ID
         for (CartItem item : cartItems) {
@@ -94,7 +137,7 @@ public class ShoppingCartService {
                 return item;
             }
         }
-        return null;
+        return cartItem;
     }
 
     private int totalItems(Set<CartItem> cartItems) {
