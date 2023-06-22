@@ -37,6 +37,7 @@ public class CustomerService {
     public Customer findByUsername(String username) {
         return customerRepository.findByUsername(username);
     }
+    
 
     public Customer saveInfor(Customer customer) {
         Customer customer1 = customerRepository.findByUsername(customer.getUsername());

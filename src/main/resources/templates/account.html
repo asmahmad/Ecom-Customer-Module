@@ -24,8 +24,11 @@
 	<!-- End All Title Box -->
 	<div class="mainDiv">
 		<div class="cardStyle">
-			<form action="" method="post" name="signupForm" id="signupForm"
-				th:object="${customer}">
+		 <div class="text alert alert-warning" th:if = "${error}">
+                <p th:text="${error}"></p>
+            </div>
+			<form th:action="@{/update-info}" method="post" name="signupForm"
+				id="signupForm" th:object="${customer}">
 
 				<img src="" id="signupLogo" />
 
@@ -47,10 +50,9 @@
 
 				<div class="inputDiv">
 					<label class="inputLabel" for="username">User name *</label> <input
-						type="text" th:field="*{username}" id="username" name="username">
+						type="text" th:field="*{username}" id="username" name="username"
+						readonly>
 				</div>
-
-
 
 				<div class="inputDiv">
 					<label class="inputLabel" for="phonenumber">Phone number *</label>
