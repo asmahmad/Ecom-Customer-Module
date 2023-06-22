@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.ecommerce.model.Customer;
+import com.ecommerce.model.ShoppingCart;
 import com.ecommerce.service.CustomerService;
 
 @Controller
@@ -31,8 +32,21 @@ public class OrderController {
 			model.addAttribute("error","You must fill all the information");
 			return "account";
 			
+		}else {
+			
+			model.addAttribute("customer",customer);
+			ShoppingCart cart = customer.getShoppingCart();
+			model.addAttribute("cart",cart);
+			
 		}
+		
 		return "checkout";
+	}
+	
+	@GetMapping("/order")
+	public String placeOrder() {
+		
+		return "order";
 	}
 
 }
