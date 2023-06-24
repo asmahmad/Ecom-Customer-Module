@@ -12,6 +12,7 @@ import com.ecommerce.model.CartItem;
 import com.ecommerce.model.Order;
 import com.ecommerce.model.OrderDetail;
 import com.ecommerce.model.ShoppingCart;
+import com.ecommerce.repository.CartItemRepository;
 import com.ecommerce.repository.OrderDetailRepositoty;
 import com.ecommerce.repository.OrderRepository;
 import com.ecommerce.repository.ShoppingCartRepository;
@@ -27,12 +28,17 @@ public class OrderService {
 	
 	@Autowired
 	private ShoppingCartRepository cartRepository;
+	
+	@Autowired
+	private CartItemRepository cartItemRepository;
 
-	void saveOrder(ShoppingCart cart) {
+	public void saveOrder(ShoppingCart cart) {
 
 		Order order = new Order();
 		order.setOrderStatus("PENDING");
+		System.out.println(order.getOrderStatus());
 		order.setOrderDate(new Date());
+		System.out.println(order.getOrderDate());
 		order.setCustomer(cart.getCustomer());
 		order.setTotalPrice(cart.getTotalPrices());
 		List<OrderDetail> orderDetailList = new ArrayList<>();
@@ -45,6 +51,7 @@ public class OrderService {
 			orderDetail.setUnitPrice(item.getProduct().getCostPrice());
 			orderDetailRepository.save(orderDetail);
 			orderDetailList.add(orderDetail);
+			cartItemRepository.delete(item);
 
 		}
 		

@@ -1,6 +1,7 @@
 package com.ecommerce.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,14 +9,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.ecommerce.model.Customer;
+import com.ecommerce.model.Order;
 import com.ecommerce.model.ShoppingCart;
 import com.ecommerce.service.CustomerService;
+import com.ecommerce.service.OrderService;
 
 @Controller
 public class OrderController {
 	
 	@Autowired
-	CustomerService customerService;
+	private CustomerService customerService;
+	@Autowired
+	private OrderService orderService;
 	
 	@GetMapping("/check-out")
 	public String checkout(Model model, Principal principal) {
@@ -44,9 +49,32 @@ public class OrderController {
 	}
 	
 	@GetMapping("/order")
-	public String placeOrder() {
+	public String placeOrder(Principal principal, Model model) {
+		
+		if(principal == null) {
+			return "redirect:/login";
+		}
+		
+		String username = principal.getName();
+		Customer customer = customerService.findByUsername(username);
+		List<Order> orderList = customer.getOrders();
+		model.addAttribute("orders", orderList);		
 		
 		return "order";
 	}
-
+	
+	@GetMapping("/save-order")
+	public String saveOrder(Principal principal) {
+		if(principal == null) {
+			
+			return "redirect:/login";
+		}
+		
+		String username = principal.getName();
+		Customer customer = customerService.findByUsername(username);
+		System.out.println("save-order");
+		ShoppingCart cart = customer.getShoppingCart();
+		orderService.saveOrder(cart);
+		return "redirect:/order";
+	}
 }
