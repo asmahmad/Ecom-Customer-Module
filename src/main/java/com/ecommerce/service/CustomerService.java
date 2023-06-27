@@ -41,6 +41,8 @@ public class CustomerService {
 
     public Customer saveInfor(Customer customer) {
         Customer customer1 = customerRepository.findByUsername(customer.getUsername());
+        customer1.setFirstName(customer.getFirstName());
+        customer1.setLastName(customer.getLastName());
         customer1.setAddress(customer.getAddress());
         customer1.setCity(customer.getCity());
         customer1.setCountry(customer.getCountry());
